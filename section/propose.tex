@@ -1,14 +1,89 @@
 \section{Proposed method}
 
-\begin{frame}{Task selection as a MAB problem}
-    \begin{block}{Reward}
+\begin{frame}{Task selection as a Multi Armed Bandit (MAB) problem}
+    \begin{block}{Action}
+        \begin{itemize}
+            \item Given a $K$ task MTO problem
+            \item Given a parent $p_1$, skill factor $\tau_{source}$
+            \item \textbf{Action} is $\tau_{target} \in \{1, \ldots, K | \tau_{source} \ne \tau_{source}
+            \}$
+            \item Then, select $p_2$ from $P_{\tau_{target}}$ to reproduce.
+        \end{itemize}
     \end{block}
-    \begin{block}{UCB}
+    \begin{block}{Reward}
+        \begin{itemize}
+            \item Given $y_{\tau_{source}}$, list of fitness of $P_{\tau_{source}}$
+            \item \textbf{Reward}
+                \begin{equation}
+                    r = \left\{
+                        \begin{array}{ll}
+                            1 \text{ if } y_c < min(y_{\tau_{source}}) \\
+                            0 \text{ otherwise }
+                        \end{array}
+                    \right.
+                \end{equation}
+        \end{itemize}
     \end{block}
 \end{frame}
 
-\begin{frame}{Algorithm}
+\begin{frame}{UCB function to solve MAB}
+    \begin{block}{Estimate expected reward}
+        Each source task $\tau_{source}$ estimate the expected reward of selecting a target task 
+        \begin{equation}
+            Q[\tau_{target}] = Q[\tau_{target}] + \alpha(r - Q[\tau_{target}])
+            \label{eq:estimate}
+        \end{equation}
+        where $Q \in \mathbb{R} ^ {K - 1}$ is the estimated expected reward, $r$ is the given reward, $\alpha$ is the discount factor.
+    \end{block}
+    \begin{block}{UCB function}
+        Each source task $\tau_{source}$ select target task by
+        \begin{equation}
+            \tau_{target} = \underset{k}{\text{argmin }} Q[k] + c \sqrt{\frac{log(t)}{N[k]}}
+            \label{eq:ucb}
+        \end{equation}
+        where $c$ is exploration-exploitation trade off coefficient, $t$ is the total number of selection, $N[k]$ is number of times task $k$ is selected.
+    \end{block}
 \end{frame}
 
 \begin{frame}{Linear decay of rmp}
+    \begin{block}{High $rmp$ first, low $rmp$ after}
+        \begin{equation}
+            rmp = \frac{rmp_{max} - rmp_{min}}{T} \times (T - t)
+        \end{equation}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Basic structure of MAB-MFEA}
+    \fontsize{6pt}{7.2}\selectfont
+    \begin{block}{Parameters}
+        \begin{itemize}
+            \item $\alpha$ - discounted factor, $c$ - exploration exploitation trade-off
+            \item $rmp_{max}$, $rmp_{min}$
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{MAB-MFEA evolution step}
+        \begin{algorithm}[H]
+            \fontsize{6pt}{7.2}\selectfont
+            \caption{\fontsize{6pt}{7.2}\selectfont Multi-step SR}\label{euclid}
+            \begin{algorithmic}[1]
+                \State Get current generation's $rmp$
+                \For{$i \in \{1, 2, \ldots\}$}
+                    \State Select parents $p_1, p_2$ randomly.
+                    \If{$\tau_1 = \tau_2$}
+                        \State SBX, Polynomial $p_1, p_2$ to $c_1, c_2$, evaluate them
+                    \ElsIf{$rand() < rmp$}
+                        \State Select $\tau_{target}$ for $\tau_1$ (Equation.\ref{eq:ucb})
+                        \State Select $p_2$ from $\tau_{target}$
+                        \State SBX, Polynomial $p_1, p_2$ to $c_1, c_2$, evaluate them
+                        \State Update estimate (Equation.\ref{eq:estimate})
+                    \Else
+                        \State Select $p_2$ from $\tau_1$
+                        \State SBX, Polynomial $p_1, p_2$ to $c_1, c_2$, evaluate them
+                    \EndIf
+                \EndFor
+                \State Elitist selection
+            \end{algorithmic}
+        \end{algorithm}
+    \end{block}
 \end{frame}

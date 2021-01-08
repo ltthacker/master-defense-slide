@@ -41,3 +41,7 @@
 % For checkmark
 \usepackage{tikz}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
+% Algorithm
+\usepackage{algorithm}
+\usepackage{algpseudocode}
