@@ -45,20 +45,20 @@ def monitor():
     observer.join()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--build', action='store_true')
-    parser.add_argument('--clear', action='store_true')
-    parser.add_argument('--show', action='store_true')
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--build', action='store_true')
+    # parser.add_argument('--clear', action='store_true')
+    # parser.add_argument('--show', action='store_true')
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
 
-    if args.build:
-        build()
-    elif args.clear:
-        clear()
-    elif args.show:
-        show()
-    else:
-        monitor()
+    # if args.build:
+    #     build()
+    # elif args.clear:
+    #     clear()
+    # elif args.show:
+    #     show()
+    # else:
+    #     monitor()
 
-    # clear()
+    clear()

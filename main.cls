@@ -45,3 +45,11 @@
 % Algorithm
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+
+% For definition
+\newtheorem{mydef}{Definition}
+
+% Abbreviation
+\usepackage[acronym, nowarn]{glossaries}
+\makeglossaries
+\loadglsentries{section/glossary}

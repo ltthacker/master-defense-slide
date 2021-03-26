@@ -1,138 +1,119 @@
 \section{Experimental results}
 
-\begin{frame}{Benchmark}
-    \begin{table}[]
-        \begin{tabular}{|c|l|l|}
-            \hline
-            \textbf{Task} & \textbf{Function} & \textbf{Ideal Assisted Task} \\ \hline \hline
-            $T_1$        & Sphere1            & None  \\ \hline
-            $T_2$        & Sphere2            & None  \\ \hline
-            $T_3$        & Sphere3            & None  \\ \hline
-            $T_4$        & Weierstrass25D     & None  \\ \hline
-            $T_5$        & Rosenbrock         & $T_1$  \\ \hline
-            $T_6$        & Ackley             & $T_2$  \\ \hline
-            $T_7$        & Weierstrass50D     & $T_3, T_4$  \\ \hline
-            $T_8$        & Schwefel           & None  \\ \hline
-            $T_9$        & Griewank           & $T_4$  \\ \hline
-            $T_10$       & Rastrigin          & None  \\ \hline
-        \end{tabular}
-    \end{table}
-\end{frame}
 
-\begin{frame}{Parameter setting}
+\begin{frame}{Experimental setup}
     \begin{columns}
+        \begin{column}{0.51\linewidth}
+            \begin{exampleblock}{Benchmark}
+            \begin{itemize}
+                \item 10-task benchmarks, easy to debug, known relationship between tasks
+                \item 50-task benchmarks, MaTSOO benchmark from the WCCI2020 Competition
+            \end{itemize}
+        \end{exampleblock}
+        \end{column}
         \begin{column}{0.48\textwidth}
-            \begin{exampleblock}{MFEA}
+            \begin{exampleblock}{MFEA/EBSGA/\gls{propose}}
                 \begin{itemize}
-                    \item Population size: 30
+                    \item Population size: 100
                     \item rmp: 0.3
                     \item sbxdi: 2
                     \item pmdi: 5
                 \end{itemize}
             \end{exampleblock}
         \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{exampleblock}{MAB-MFEA}
-                \begin{itemize}
-                    \item $rmp_{min}$: $0.1$
-                    \item $rmp_{max}$: $0.9$
-                    \item $\alpha$: $0.01$ - discounted coefficient
-                    \item $c$: $0.5$ - UCB explore/exploit trade-off coefficient
-                \end{itemize}
-            \end{exampleblock}
-        \end{column}
     \end{columns}
     \begin{exampleblock}{MaTGA}
-        \begin{itemize}
-            \item $NP$:
-            \item $\lambda$: $0.8$ - reward shrink rate
-            \item $\rho$: $0.8$ - attenuation coefficient
-            \item $\alpha$: $0.1$ - knowledge transfer rate
-            \item $UR$: $0.2$ - archive update rate
-            \item $AcS$: $300$ - archive size
-        \end{itemize}
+        Use authors' default parameters
     \end{exampleblock}
 \end{frame}
 
-\begin{frame}{Table}
-    \begin{table}[]
-        \begin{tabular}{|c|c|c|c|}
-            \hline
-            \textbf{}      & \textbf{MFEA} & \textbf{MaTGA} & \textbf{MAB-MFEA} \\ \hline \hline
-            $T_1$          & 1.32E+00      & \textbf{2.45E-04}       & 2.85E-03          \\ \hline
-            $T_2$          & 1.27E+00      & 4.75E-04       & \textbf{1.15E-12}          \\ \hline
-            $T_3$          & 1.17E+00      & \textbf{0}              & \textbf{6.30E-09}          \\ \hline
-            $T_4$          & 3.37E+00      & \textbf{1.00E-06}       & 5.37E-04          \\ \hline
-            $T_5$          & 8.15E+02      & \textbf{2.16E-02}       & 1.01E+01          \\ \hline
-            $T_6$          & 1.99E+01      & 3.61E-03       & \textbf{1.05E-07}          \\ \hline
-            $T_7$          & 1.05E+01      & \textbf{5.57E-04}       & 1.52E-03          \\ \hline
-            $T_8$          & 2.34E+03      & \textbf{3.40E-02 }      & 9.21E+02          \\ \hline
-            $T_9$          & 4.11E-02      & 4.52E-03       & \textbf{4.50E-03}          \\ \hline
-            $T_10$         & 1.55E+01      & 1.57E+01       & \textbf{7.77E+00}          \\ \hline
+\begin{frame}{Result on 10-task benchmark}
+    \begin{table}[H]
+        \begin{tabular}{@{}ccccc@{}}
+            \toprule
+            \textbf{Task} & \gls{propose} & MFEA & MaTGA & EBSGA \\ \midrule
+            $T_1$ & \textbf{3.72E-05}   & 1.31E+00 $(-)$          & 2.45E-04          $(-)$ & 5.58E-04 $(-)$ \\
+            $T_2$ & \textbf{6.48E-06}   & 1.27E+00 $(-)$          & 4.75E-04          $(-)$ & 6.10E-05 $(-)$ \\
+            $T_3$ & \textbf{4.35E-07}   & 1.17E+00 $(-)$          & \textbf{0.00E+00} $(\approx)$ & 2.00E-06 $(-)$ \\
+            $T_4$ & \textbf{7.09E-13}   & 3.37E+00 $(-)$          & 1.00E-06          $(-)$ & 1.60E-05 $(-)$ \\
+            $T_5$ & 1.74E+01            & 8.15E+02 $(-)$          & \textbf{2.16E-02} $(+)$ & 3.29E-02 $(+)$ \\
+            $T_6$ & \textbf{7.03E-04}   & 1.99E+01 $(-)$          & 3.61E-03          $(-)$ & \textbf{8.59E-04} $(\approx)$ \\
+            $T_7$ & 1.00E-02            & 1.05E+01 $(-)$          & \textbf{5.57E-04} $(+)$ & 1.60E-03 $(+)$ \\
+            $T_8$ & 1.89E+02            & 2.34E+03 $(-)$          & \textbf{3.40E-02} $(-)$ & 4.73E-02 $(-)$ \\
+            $T_9$ & \textbf{4.00E-07}   & 4.11E+02 $(-)$          & 4.52E-03          $(-)$ & 4.58E-03 $(-)$ \\
+            $T_{10}$ & 2.74E+01            & \textbf{1.54E+01} $(+)$ & 1.57E+01          $(+)$ & 3.41E+01 $(-)$ \\
+            \bottomrule
         \end{tabular}
-        \caption{The performance of 3 algorithms for 30 independent runs}
+        \caption{The performance of the GA-based evolution many-tasking algorithms of 10-task benchmark after 30 independent runs. $(-, +, and \approx$ denote the corresponding algorithm is significantly worse, better or similar to \gls{propose} after Wilcoxon signed-rank test at $\alpha=0.05 )$}
+        \label{tab:last10}
     \end{table}
 \end{frame}
 
-\begin{frame}{Analysis}
+\begin{frame}{Analyse the KL-UCB}
     \begin{figure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/1.eps}
-            \caption{Task 1}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/2.eps}
-            \caption{Task 2}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/3.eps}
-            \caption{Task 3}
-        \end{subfigure}
-
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/4.eps}
-            \caption{Task 4}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/5.eps}
+        \centering
+        \begin{subfigure}[b]{0.3\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figure/experiment/bar10/5.eps}
             \caption{Task 5}
+            \label{fig:bar10-5}
         \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/6.eps}
+        \hfill
+        \begin{subfigure}[b]{0.3\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figure/experiment/bar10/6.eps}
             \caption{Task 6}
+            \label{fig:bar10-6}
         \end{subfigure}
-
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/7.eps}
+        \hfill
+        \begin{subfigure}[b]{0.3\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figure/experiment/bar10/7.eps}
             \caption{Task 7}
+            \label{fig:bar10-7}
         \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/8.eps}
-            \caption{Task 8}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.27\linewidth}
-            \includegraphics[width=\textwidth]{figure/count/9.eps}
+        \hfill
+        \begin{subfigure}[b]{0.3\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figure/experiment/bar10/9.eps}
             \caption{Task 9}
+            \label{fig:bar10-9}
         \end{subfigure}
-
-        \caption{The average times of choosing knowledge transfer target, the assisted task is highlighted in red}
+        \hfill
+        \caption{The average times of choosing knowledge transfer target for complex tasks by \gls{propose} with the ideal assisted task is highlighted in red}
+        \label{fig:count10}
     \end{figure}
 \end{frame}
 
-\begin{frame}{Analysis}
-    \begin{figure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{figure/ucb/5.eps}
-            \caption{Task 5}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{figure/ucb/6.eps}
-            \caption{Task 6}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.32\linewidth}
-            \includegraphics[width=\linewidth]{figure/ucb/7.eps}
-            \caption{Task 7}
-        \end{subfigure}
-        \caption{The UCB function value (Equation.\ref{eq:ucb}) for choosing knowledge transfer target, the assisted task is highlighted in red}
-    \end{figure}
+
+\begin{frame}{Result on 50-task benchmark}
+    \begin{table}[hp]
+        \centering
+        \begin{tabular}{@{}ccccc@{}}
+            \toprule
+            \textbf{Benchmark} & \gls{propose} & MFEA & MaTGA & EBSGA \\ \midrule
+            $B_1$    & \textbf{50 (50)} & 0 (0) & 0 (0)           & 0 (0) \\
+            $B_2$    & \textbf{50 (50)} & 0 (0) & 0 (0)           & 0 (0) \\
+            $B_3$    & 8 (0)            & 0 (0) & \textbf{42 (8)} & 0 (0) \\
+            $B_4$    & 17 (9)           & 0 (0) & 0 (0)           & \textbf{33 (33)} \\
+            $B_5$    & \textbf{50 (50)} & 0 (0) & 0 (0)           & 0 (0) \\
+            $B_6$    & \textbf{50 (50)} & 0 (0) & 0 (0)           & 0 (0) \\
+            $B_7$    & 3 (0)            & 0 (0) & 14 (2)          & \textbf{33 (28)} \\
+            $B_8$    & \textbf{30 (28)} & 0 (0) & 0 (0)           & 20 (20) \\
+            $B_9$    & \textbf{42 (42)} & 0 (0) & 0 (0)           & 8 (8) \\
+            $B_{10}$ & 8 (6)            & 2 (0) & 11 (10)         & \textbf{29 (23)} \\
+            \bottomrule
+        \end{tabular}
+        \caption{The performance of the GA-based evolution many-tasking algorithms of 10 benchmarks, each contains 50 tasks, after 30 independent runs. Each entry denotes the number of tasks which the corresponding algorithm is better than other algorithms. The figure within the curly brace indicates the number of tasks which the corresponding algorithm is the best, and it is significantly better than the $2^{nd}$ place algorithm, tested by Wilcoxon signed-rank test at $\alpha=0.05 )$}
+        \label{tab:last50}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Execution time analysis}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figure/experiment/runtime.eps}
+    \caption{Execution of different algorithms on two many-tasking benchmarks divided by execution time of MFEA on the same runtime environment}
+    \label{fig:runtime}
+\end{figure}
 \end{frame}

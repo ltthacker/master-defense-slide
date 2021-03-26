@@ -9,6 +9,16 @@
             \item Do not group ideal assist tasks
         \end{itemize}
     \end{block}
+
+    \begin{block}{MFEA-II}
+        \fullcite{bali2019multifactorial}
+    \end{block}
+    \begin{block}{Problem}
+        \begin{itemize}
+            \item Solving the auxiliary optimization problem of adjusting the knowledge transfer coefficient based on the similarity of populations of the given tasks
+            \item Number of problem increase quadratically when number of tasks are increased
+        \end{itemize}
+    \end{block}
 \end{frame}
 
 \begin{frame}{MaTGA}
@@ -19,7 +29,20 @@
         \begin{itemize}
             \item Store past solutions
             \item Measure KLD between past solutions
-            \item Complex, many parameters
+            \item Complex, many hyper-parameters, long computation times
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{EBSGA}
+    \begin{block}{EBSGA}
+        \fullcite{liaw2019evolutionary}
+    \end{block}
+    \begin{block}{Problem}
+        \begin{itemize}
+            \item Knowledge exchange by individuals swapping.
+            \item Keeps track of the frequency of success and fail individual swapping  todetermine the next pair of tasks to swap the individuals.
+            \item The adaptive transfer strategy is handcrafted.
         \end{itemize}
     \end{block}
 \end{frame}
