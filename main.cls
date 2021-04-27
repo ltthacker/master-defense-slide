@@ -6,7 +6,7 @@
 \usepackage{CJKutf8}
 
 % For citation
-\usepackage[style=ieee]{biblatex}
+\usepackage[maxcitenames=99]{biblatex}
 \addbibresource{./main.bib}
 
 % Table of content at begin of each section
@@ -52,4 +52,11 @@
 % Abbreviation
 \usepackage[acronym, nowarn]{glossaries}
 \makeglossaries
-\loadglsentries{section/glossary}
+\loadglsentries{section/util/glossary}
+
+% For Vietnamese
+\usepackage[utf8]{vietnam}
+
+% For highlight
+\usepackage{color, soul}
+\usepackage{xcolor}
