@@ -45,20 +45,68 @@
             \item $t$ là tổng số của tất cả các lần lựa chọn
         \end{itemize}
     \end{block}
-    \begin{block}{Tham khảo}
+    \begin{block}{Tham khảo lý thuyết tại}
         \fullcite{lattimore2020bandit}
     \end{block}
 \end{frame}
 
-\begin{frame}{Cấu trúc cập nhật tuần tự}
-    Viết cái giải thuật mô tả
+\begin{frame}{Khung giải thuật đề xuất - Ma2BEA}
+    \begin{algorithm}[H]
+        \caption{\gls{propose} trong mỗi thế hệ của tác vụ $T_k$}
+        \fontsize{6pt}{10}\selectfont
+        \begin{algorithmic}[1]
+            \State Khởi tạo quần thể con $P_{(c)}^k=\emptyset$
+            \While{số con sinh ra $< N$}
+                \State Chọn ngẫu nhiên cá thể cha $p_a$ từ $P^k$
+                \If{$rand(0, 1) < rmp$}
+                    \State {\color{red} Chọn tác vụ $T_{k'}$ sử dụng phương trình \gls{klucb} trong Công thức \ref{eq:propose:klucb}}
+                    \State Chọn ngẫu nhiên cá thể mẹ $p_b$ từ $P^{k'}$
+                    \State $c = $ \emph{Lai ghép khác tác vụ} giữa $p_a$ và $p_b$
+                \Else
+                    \State Chọn ngẫu nhiên cá thể mẹ $p_b$ từ $P^k$
+                    \State $c = $ \emph{Lai ghép cùng tác vụ} giữa $p_a$ và $p_b$
+                \EndIf
+                \State $c =$ Đột biến $c$
+                \State Đánh giá cá thể con $c$
+                \State {\color{red} Cập nhật lại ước lượng $\mu(k')$ và số lượng $N(k')$ cho \gls{klucb} nếu $c$ được sinh ra từ việc \emph{Lai ghép khác tác vụ}}
+                \State $P^k_{(c)} = P^k_{(c)} \cup \{c\}$
+            \EndWhile
+            \State $P^k \leftarrow$ Chọn $N$ cá thể tốt nhất từ $P^k \cup P^k_{(c)}$ để tạo lại $P^k$ cho thế hệ tiếp theo
+        \end{algorithmic}
+        \label{alg:propose:generation}
+    \end{algorithm}
 \end{frame}
 
-\begin{frame}{Cấu trúc cập nhật tuần tự}
-    Vẽ cái nguyên lý, giải thích lý do.
+\begin{frame}{Cấu trúc cập nhật tuần tự - 1}
+    \begin{algorithm}[H]
+        \caption{Giả mã của toàn bộ \gls{propose}}
+        \begin{algorithmic}[1]
+            \For{$k \in \{1, \ldots, K\}$}
+                \State Khởi tạo ngẫu nhiên $N \sim \mathbb{R}^{D_{unified}}$ cá thể để tạo ra quần thể $P^k$;
+                \State Evaluate individual in $P^k$ for task $T_k$ only;
+            \EndFor
+            \While{điều kiện kết thúc chưa thỏa mãn}
+                \For{$k \in $ hoán vị ngẫu nhiên của $({1, \ldots, K})$}
+                    \State Thực hiện Thuật toán \ref{alg:propose:generation} cho tác vụ $T_k$;
+                \EndFor
+            \EndWhile
+        \end{algorithmic}
+        \label{alg:propose:propose}
+    \end{algorithm}
 \end{frame}
 
-\begin{frame}{Tóm tắt}
+\begin{frame}{Cấu trúc cập nhật tuần tự - 2}
+    \begin{block}{Ví dụ cho tác dụng của cập nhật tuần tự trong \gls{propose}}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{figure/propose/sequential-motivation.eps}
+            \caption{Cập nhật tuần tự trên hai tác vụ có địa hình hàm mục tiêu tương đồng. Trục tung, trục hoành là giá trị của nghiệm. Trục thẳng đứng là giá trị hàm mục tiêu.}
+            \label{fig:propsoe:sequential-motivation}
+        \end{figure}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Tóm tắt đóng góp}
     Tóm tắt những ý tốt xấu so với các nghiên cứu liên quan
 \end{frame}
 
