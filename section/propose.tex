@@ -82,12 +82,12 @@
         \caption{Giả mã của toàn bộ \gls{propose}}
         \begin{algorithmic}[1]
             \For{$k \in \{1, \ldots, K\}$}
-                \State Khởi tạo ngẫu nhiên $N \sim \mathbb{R}^{D_{unified}}$ cá thể để tạo ra quần thể $P^k$;
-                \State Evaluate individual in $P^k$ for task $T_k$ only;
+                \State Khởi tạo ngẫu nhiên $N \sim \mathbb{R}^{D_{unified}}$ cá thể để tạo ra quần thể $P^k$
+                \State Đánh giá $P^k$ trên $f_k$
             \EndFor
             \While{điều kiện kết thúc chưa thỏa mãn}
                 \For{$k \in $ hoán vị ngẫu nhiên của $({1, \ldots, K})$}
-                    \State Thực hiện Thuật toán \ref{alg:propose:generation} cho tác vụ $T_k$;
+                    \State Thực hiện Thuật toán \ref{alg:propose:generation} cho tác vụ $T_k$
                 \EndFor
             \EndWhile
         \end{algorithmic}
@@ -107,99 +107,73 @@
 \end{frame}
 
 \begin{frame}{Tóm tắt đóng góp}
-    Tóm tắt những ý tốt xấu so với các nghiên cứu liên quan
+    \begin{columns}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Các đề xuất tại \gls{propose}}
+                \begin{itemize}
+                    \item Mô hình hóa ghép cặp trao đổi tri thức giữa các tác vụ trên mô hình MAB, giải bằng KLUCB.
+                    \item Thay cấu trúc của MFEA bằng cấu trúc trao đổi tuần tự.
+                \end{itemize}
+            \end{block}
+            \begin{block}{So với MFEA}
+                \begin{itemize}
+                    \item SBSGA, MaTGA, \gls{propose} đều trội hơn ở cơ chế trao đổi tri thức tự thích ứng.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{So với MaTGA}
+                \begin{itemize}
+                    \item \gls{propose} nhanh hơn, vì chỉ phân tích dữ liệu hàm mục tiêu ($\sim \mathbb{R}^{N \times K}$), thay vì phân tích dữ liệu lịch sử quần thể ($\sim \mathbb{R}^{D_{unified} \times N \times K}$).
+                    \item Không phụ thuộc biểu diễn quần thể.
+                    \item \gls{propose} ít tham số hơn, không cần chọn lưu lại quá khứ bao nhiêu cá thể như MaTGA.
+                \end{itemize}
+            \end{block}
+            \begin{block}{So với SBSGA}
+                \begin{itemize}
+                    \item Cách ghép cặp của \gls{propose} có nên tảng lý thuyết hơn so với SBSGA
+                \end{itemize}
+            \end{block}        
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Áp dụng - Tối ưu nhiều mạng nơ-ron}
-    Tổng kết vào đây.
+    \begin{columns}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Bài toán học tăng cường}
+                \begin{figure}
+                    \centering
+                    \includegraphics[width=0.7\linewidth]{figure/propose/mdp.png}
+                    \caption{Tương tác giữa tác tử (Agent) và môi trường (Environment) trong mô hình Markov Decision Process.}
+                    \label{fig:propose:mdp}
+                \end{figure}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Lý do áp dụng tiến hóa đa nhiệm cho học tăng cường}
+                \begin{itemize}
+                    \item Hàm mục tiêu không có gradient.
+                    \item Có nhiều môi trường tương tự nhau, việc giải cùng nhau hy vọng sẽ cho kết quả tối ưu hơn.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \begin{alertblock}{Giải nhiều bài toán học tăng cường}
+        \textbf{Cho:} $K$ môi trường $\{E_1, \ldots, E_K\}$
+        \begin{columns}
+            \begin{column}{0.48\textwidth}
+                \begin{equation}
+                    \underset{\theta_k}{\text{maximize }} F(\theta_k; E_k) = \sum_{t=1}^{T} r_t
+                \end{equation}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \begin{itemize}
+                    \item $\theta_k$: tham số mô hình đưa quyết định (mạng nơ ron) 
+                    \item $r_t$: phần thưởng tại thời điểm $t$
+                \end{itemize}
+            \end{column}
+        \end{columns}
+    \end{alertblock}
 \end{frame}
 
-% \begin{frame}{Task selection as a Multi Armed Bandit (MAB) problem}
-%     \begin{block}{Given}
-%         \begin{itemize}
-%             \item A $K$-task MTO problem
-%         \end{itemize}
-%     \end{block}
-%     \begin{mydef}[Action]
-%         For a task $k$, there are $K-1$ actions of choosing $k'$ such that $k' \in \{1, \ldots, K\} \text{ and } k' \ne k$.
-%         \label{def:action}
-%     \end{mydef}
-%     \begin{mydef}[Reward]
-%         After task $k'$ is selected to be combined with task $k$, the reward of choosing that action is defined as 
-%         \begin{equation}
-%             reward = \left\{
-%                 \begin{array}{ll}
-%                     1 \text{ if } f_k(c) < f_k(p) , \exists p \in P_k \\\
-%                     0 \text{ otherwise}.
-%                 \end{array}
-%               \right.
-%         \end{equation}
-%         where $c$ is the offspring generated by the reproduction procedure and $f_k(.)$ is the fitness function of the $k^{th}$ task.
-%         \label{def:reward}
-%     \end{mydef}
-% \end{frame}
-
-% \begin{frame}{UCB function to solve MAB}
-%     \begin{block}{Property of reward function}
-%         \begin{itemize}
-%             \item Reward takes two value $0$ or $1$ $\rightarrow$ reward distribution is generated from an unknown Bernoulli distribution.
-%             \item From \footfullcite{lattimore2020bandit}, use KL-UCB to solve.
-%         \end{itemize}
-%     \end{block}
-%     \begin{block}{KL-UCB function}
-%         \begin{equation}
-%             k' = \underset{j}{\text{argmin }} \mu(j) + \frac{1 + t \times log^2(t) }{N(j)}
-%             \label{eq:klucb}
-%         \end{equation}
-%         where 
-%         \begin{itemize}
-%             \item $\mu(j)$ is the mean of reward when task $j$ is chosen
-%             \item $N(j)$ is the number of times task $j$ is chosen
-%             \item $t$ is the total number of actions chosen.
-%         \end{itemize}
-%     \end{block}
-% \end{frame}
-
-% \begin{frame}{\gls{propose}, optimize 1 task, 1 generation}
-%     \begin{algorithm}[H]
-%         \fontsize{6pt}{10}\selectfont
-%         \caption{\fontsize{6pt}{10}\selectfont\gls{propose} on each generation of $k^{th}$ task}
-%         \begin{algorithmic}[1]
-%             \State Initialize $P^{(c)}_k=\emptyset$;
-%             \While{number of offspring $< N$}
-%                 \State Randomly select $p_a$ from $P_k$;
-%                 \If{$rand(0, 1) < rmp$}
-%                     \State Choose $k'$ using Formula \eqref{eq:klucb};
-%                     \State Randomly select $p_b$ from $P_{k'}$;
-%                     \State $c = $ \emph{Inter-task crossover} between  $p_a$ and $p_b$;
-%                 \Else
-%                     \State Sample $p_b$ from $P_k$;
-%                     \State $c = $ \emph{Intra-task crossover} between  $p_a$ and $p_b$;
-%                 \EndIf
-%                 \State $c = mutate(c)$;
-%                 \State Evaluate offspring $c$;
-%                 \State Update estimation $\mu(k')$ and $N(k')$ for \gls{klucb} if $c$ generated by inter-task crossover;
-%                 \State $P_k^{(c)} = P_c \cup \{c\}$;
-%             \EndWhile
-%             \State $P_k \leftarrow$ Select $N$ best individuals from $P_k \cup P_k^{(c)}$ to form the next-population of task $k$;
-%         \end{algorithmic}
-%     \end{algorithm}
-% \end{frame}
-
-
-% \begin{frame}{\gls{propose}, proposed structure for manytasking}
-%     \begin{algorithm}[H]
-%         \caption{Pseudo code of \gls{propose}}
-%         \begin{algorithmic}[1]
-%             \For{$k \in \{1, \ldots, K\}$}
-%                 \State Randomly sample $N$ individuals to form subpopulation $P_k$;
-%                 \State Evaluate individual in $P_k$ for task $k$ only;
-%             \EndFor
-%             \While{stopping conditions are not satisfied}
-%                 \For{$k \in random\_permutation({1, \ldots, K})$}
-%                     \State Invoke Algorithm 1 for task $k$;
-%                 \EndFor
-%             \EndWhile
-%         \end{algorithmic}
-%     \end{algorithm}
-% \end{frame}

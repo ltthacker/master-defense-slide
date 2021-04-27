@@ -4,7 +4,7 @@
 \subsection{Thuật toán tiến hóa đa nhiệm}
 
 \begin{frame}{Thuật toán tiến hóa đa nhiệm - 1}
-    \begin{alertblock}{Phát biểu bài toán}
+    \begin{alertblock}{Phát biểu bài toán tối ưu đa nhiệm tổng quát}
         \begin{itemize}
             \item \textbf{Cho:} $K$ bài toán tối ưu.
             \item Tác vụ $T_k$ ứng với việc giải bài toán thứ $k$.
@@ -65,9 +65,6 @@
                     \ElsIf{{\color{red}$rand \le rmp$}}
                         \State {\color{red}$[c_a, c_b] \leftarrow$ \emph{Lai ghép khác tác vụ} giữa $p_a$ và $p_b$}
                         \State Gãn ngẫu nhiên \emph{skill factor} $\tau_a$ or $\tau_b$ cho từng con sinh ra
-                    \Else
-                        \State Gán \emph{skill factor} $\tau_a$ cho $c_a$ 
-                        \State Gán \emph{skill factor} $\tau_b$ cho $c_b$
                     \EndIf
                 \end{algorithmic}
                 \label{alg:preliminary:mfea}
@@ -129,5 +126,6 @@
                 \end{figure}
             \end{column}
         \end{columns}
+        $\rightarrow$ Trong tiến hóa đa nhiệm, cũng có thể áp dụng MAB để chọn tác vụ ghép cặp sao cho kết quả tối ưu tối nhất.
     \end{block}
 \end{frame}

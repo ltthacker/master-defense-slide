@@ -13,13 +13,13 @@
 \AtBeginSection[]
 {
     \begin{frame}<beamer>
-    \frametitle{Agenda}
+    \frametitle{Mục lục}
     \tableofcontents[currentsection]
     \end{frame}
 }
 \AtBeginSubsection[]{
   \frame<beamer>{
-    \frametitle{Agenda}
+    \frametitle{Mục lục}
     \tableofcontents[currentsection,currentsubsection]
   }
 }
@@ -47,7 +47,7 @@
 \usepackage{algpseudocode}
 
 % For definition
-\newtheorem{mydef}{Definition}
+\newtheorem{mydef}{Định nghĩa}
 
 % Abbreviation
 \usepackage[acronym, nowarn]{glossaries}
@@ -60,3 +60,8 @@
 % For highlight
 \usepackage{color, soul}
 \usepackage{xcolor}
+
+% For mathmode ceil
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
